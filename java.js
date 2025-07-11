@@ -44,3 +44,98 @@ function renderBooksToTable(arr) {
     tableRow.appendChild(cell3);
   }
 }
+
+const dialog = document.createElement("dialog");
+dialog.id = "bookDialog";
+
+//form-method = dialog
+const form = document.createElement("form");
+form.className = "user-input-form";
+form.method = "dialog";
+//TITLE//
+const titleRow = document.createElement("div");
+titleRow.className = "form-row";
+
+const titleLabel = document.createElement("label");
+titleLabel.textContent = "Title";
+const titleInput = document.createElement("input");
+titleInput.type = " text";
+titleInput.placeholder = "Book Title";
+titleInput.name = "title";
+titleInput.required = true;
+
+titleRow.append(titleLabel, titleInput);
+form.appendChild(titleRow);
+
+//AUTHOR//
+const authorRow = document.createElement("div");
+authorRow.className = "form-row";
+
+const authorLabel = document.createElement("label");
+authorLabel.textContent = "Author";
+const authorInput = document.createElement("input");
+authorInput.type = "text";
+authorInput.placeholder = "Author";
+authorInput.name = "author";
+authorInput.required = true;
+authorRow.append(authorLabel, authorInput);
+
+//PAGES//
+const pageRow = document.createElement("div");
+pageRow.className = "form-row";
+
+const pageLabel = document.createElement("label");
+pageLabel.textContent = "Number of pages";
+const pageInput = document.createElement("input");
+pageInput.type = "number";
+pageInput.placeholder = "Pages";
+pageInput.name = "pages";
+pageInput.required = true;
+pageRow.append(pageLabel, pageInput);
+
+//READ SELECT??
+const selectRow = document.createElement("div");
+selectRow.className = "form-row";
+
+const readLabel = document.createElement("label");
+readLabel.textContent = "Read ?";
+const readSelect = document.createElement("select");
+readSelect.name = "read";
+
+const optionYes = document.createElement("option");
+optionYes.value = "yes";
+optionYes.textContent = "yes";
+const optionNo = document.createElement("option");
+optionNo.value = "no";
+optionNo.textContent = "no";
+readSelect.append(optionYes, optionNo);
+selectRow.append(readLabel, readSelect);
+
+//  BUTTON
+const buttonRow = document.createElement("div");
+buttonRow.className = "form-row";
+
+const cancelButton = document.createElement("button");
+cancelButton.value = "cancel";
+cancelButton.type = "button";
+cancelButton.textContent = "Cancel";
+
+const submitButton = document.createElement("button");
+submitButton.value = "submit";
+submitButton.type = "submit";
+submitButton.textContent = "Add Book";
+buttonRow.append(cancelButton, submitButton);
+
+// Append elements to form
+form.appendChild(titleRow);
+form.appendChild(authorRow);
+form.appendChild(pageRow);
+form.appendChild(selectRow);
+form.appendChild(buttonRow);
+
+// Add form to dialog
+dialog.appendChild(form);
+// Add dialog to body
+document.body.appendChild(dialog);
+
+dialog.showModal();

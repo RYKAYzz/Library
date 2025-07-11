@@ -1,0 +1,53 @@
+body {
+  background-color: rgb(214, 214, 214);
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+table {
+  position: relative;
+  left: 4rem;
+  top: 4rem;
+  border-collapse: collapse;
+  border: 3px solid black;
+}
+th,
+td {
+  border: 2px solid rgb(110, 53, 255);
+  padding: 0.8rem;
+  width: 8rem;
+}
+td {
+  text-align: center;
+}
+#bookDialog {
+  border-radius: 12px;
+  border: rgb(177, 0, 0) solid 2px;
+}
+.user-input-form {
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+  row-gap: 30px;
+  padding: 1rem;
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  font-size: 1.5rem;
+  column-gap: 30px;
+  font-family: sans-serif;
+}
+.form-row input {
+  border-radius: 5px;
+  font-size: 1rem;
+}
+.form-row input:invalid {
+  border: red 2px solid;
+}
+.form-row input:valid {
+  border: green 2px solid;
+}
+.form-row button {
+  border-radius: 8px;
+  font-size: 1rem;
+}
