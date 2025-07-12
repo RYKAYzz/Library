@@ -42,11 +42,47 @@ function renderBooksToTable(arr) {
     const cell3 = document.createElement("td");
     cell3.textContent = currentBook.read;
     tableRow.appendChild(cell3);
+
+    //Add delete and update button after each row is created
+    const actionCell = document.createElement("td");
+    actionCell.className = "last-cell";
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "Remove book";
+    deleteBtn.classList.add("delete-btn");
+    deleteBtn.dataset.id = currentBook.id; // Store book id in data attribute
+
+    const updateBtn = document.createElement("button");
+    updateBtn.textContent = "Update book";
+    updateBtn.classList.add("update-btn");
+    updateBtn.dataset.id = currentBook.id;
+
+    actionCell.append(deleteBtn, updateBtn);
+    tableRow.appendChild(actionCell);
   }
 }
+//delete button after a row is created
 
 const dialog = document.createElement("dialog");
 dialog.id = "bookDialog";
+
+//add book
+const newBook = document.createElement("button");
+newBook.textContent = "New Book";
+newBook.value = "new-book";
+document.body.appendChild(newBook);
+newBook.addEventListener("click", () => {
+  newBook.addEventListener("click", () => {
+    // Clear the form fields
+    titleInput.value = "";
+    authorInput.value = "";
+    pageInput.value = "";
+    readSelect.value = "yes"; // Or "no", default to something
+
+    currentEditingId = null; // Reset editing mode
+    dialog.showModal();
+  });
+});
 
 //form-method = dialog
 const form = document.createElement("form");
@@ -59,7 +95,7 @@ titleRow.className = "form-row";
 const titleLabel = document.createElement("label");
 titleLabel.textContent = "Title";
 const titleInput = document.createElement("input");
-titleInput.type = " text";
+titleInput.type = "text";
 titleInput.placeholder = "Book Title";
 titleInput.name = "title";
 titleInput.required = true;
@@ -127,15 +163,72 @@ submitButton.textContent = "Add Book";
 buttonRow.append(cancelButton, submitButton);
 
 // Append elements to form
-form.appendChild(titleRow);
-form.appendChild(authorRow);
-form.appendChild(pageRow);
-form.appendChild(selectRow);
-form.appendChild(buttonRow);
-
+form.append(titleRow, authorRow, pageRow, selectRow, buttonRow);
 // Add form to dialog
 dialog.appendChild(form);
 // Add dialog to body
 document.body.appendChild(dialog);
 
-dialog.showModal();
+//toggle table
+const table = document.querySelector(".table-output");
+table.hidden = true;
+
+//LOGIC//
+dialog.addEventListener("submit", (e) => {
+  const title = e.target.title.value;
+  const author = e.target.author.value;
+  const pages = e.target.pages.value;
+  const read = e.target.read.value;
+  if (currentEditingId) {
+    const book = myLibrary.find((b) => b.id === currentEditingId);
+    book.title = title;
+    book.author = author;
+    book.pages = pages;
+    book.read = read;
+    currentEditingId = null;
+  } else {
+    addBookToLibrary({ title, author, pages, read });
+  }
+  renderBooksToTable(myLibrary);
+  dialog.close();
+
+  table.hidden = false;
+});
+
+cancelButton.addEventListener("click", () => {
+  dialog.close();
+});
+//function to deleteBook
+function deleteBook(arr, targetID) {
+  const index = arr.findIndex((book) => book.id === targetID);
+  if (index !== -1) {
+    arr.splice(index, 1);
+  }
+}
+//function to updateBook
+let currentEditingId = null;
+function updateBook(arr, targetID) {
+  const book = arr.find((book) => book.id === targetID);
+  if (book) {
+    titleInput.value = book.title;
+    authorInput.value = book.author;
+    pageInput.value = book.pages;
+    readSelect.value = book.read;
+
+    currentEditingId = book.id;
+    dialog.showModal();
+  }
+}
+//event delegation on table body
+table.addEventListener("click", (e) => {
+  if (e.target.classList.contains("delete-btn")) {
+    const bookId = e.target.dataset.id;
+    deleteBook(myLibrary, bookId);
+    renderBooksToTable(myLibrary);
+  }
+  if (e.target.classList.contains("update-btn")) {
+    const bookId = e.target.dataset.id;
+    updateBook(myLibrary, bookId);
+    renderBooksToTable(myLibrary);
+  }
+});
